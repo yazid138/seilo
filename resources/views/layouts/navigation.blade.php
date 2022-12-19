@@ -15,6 +15,24 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    @switch(Auth::user()->role)
+                        @case('ADMIN')
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                {{ __('Company') }}
+                            </x-nav-link>
+                        @break
+
+                        @case('COMPANY')
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                {{ __('Job') }}
+                            </x-nav-link>
+                        @break
+
+                        @default
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                {{ __('List Job') }}
+                            </x-nav-link>
+                    @endswitch
                 </div>
             </div>
 
