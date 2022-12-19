@@ -18,7 +18,7 @@ class Company extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'staff_companies');
     }
 
     public function address()
@@ -38,6 +38,6 @@ class Company extends Model
 
     public function sectors()
     {
-        return $this->belongsToMany(Sector::class);
+        return $this->belongsToMany(Sector::class, 'sector_companies');
     }
 }
