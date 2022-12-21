@@ -17,7 +17,7 @@
                     </x-nav-link>
                     @switch(Auth::user()->role)
                         @case('ADMIN')
-                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            <x-nav-link :href="route('company')" :active="request()->routeIs('company')">
                                 {{ __('Company') }}
                             </x-nav-link>
                         @break
