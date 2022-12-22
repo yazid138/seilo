@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CompanyCreateRequest;
+use App\Http\Requests\CompanyCreateUserRequest;
+use App\Http\Requests\CompanyUpdateRequest;
 use App\Models\Address;
 use App\Models\Company;
 use App\Models\Media;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class CompanyController extends Controller
 {
@@ -66,7 +70,7 @@ class CompanyController extends Controller
             'url' => $request->companyWeb,
         ]);
 
-        return to_route('company');
+        return redirect()->back();
     }
 
     /**
@@ -77,7 +81,11 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        return view('company.show', compact('company'));
+        $users = User::where('role', 'COMPANY')->whereHas('company', function ($q) use ($company) {
+            $q->where('company_id', $company->id);
+        })->get();
+
+        return view('company.show', compact('company', 'users'));
     }
 
     /**
@@ -98,9 +106,35 @@ class CompanyController extends Controller
      * @param  \App\Models\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Company $company)
+    public function update(CompanyUpdateRequest $request, Company $company)
     {
-        //
+        Address::find($company->address()->id)->update([
+            'description' => $request->address,
+            'province' => $request->province,
+            'city' => $request->city,
+            'postal_code' => $request->postal_code,
+        ]);
+        $media;
+        if ($request->hasFile('companyLogo')) {
+            $image = $request->file('companyLogo');
+            $name = time() . '-' . uniqid() . '.' . $image->extension();
+            $image->storeAs('images', $name, 'public');
+            $media = Media::create([
+                'name' => $image->getClientOriginalName(),
+                'url' => asset('storage/images/' . $name),
+                'type' => $image->getMimeType(),
+                'size' => $image->getSize(),
+            ]);
+        }
+        $company->update([
+            'foto_id' => $media->id,
+            'name' => $request->companyName,
+            'email' => $request->companyEmail,
+            'phone' => $request->companyPhone,
+            'url' => $request->companyWeb,
+        ]);
+
+        return redirect()->back();
     }
 
     /**
@@ -112,5 +146,37 @@ class CompanyController extends Controller
     public function destroy(Company $company)
     {
         //
+    }
+
+    public function userRegister(Request $request)
+    {
+        return view('company.user.create');
+    }
+
+    public function userStore(CompanyCreateUserRequest $request, Company $company)
+    {
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make('123'),
+            'role' => 'COMPANY',
+        ]);
+
+        $company->users()->attach($user);
+
+        return to_route('company.show', $company);
+    }
+
+    public function userShow(Request $request, Company $company, User $user)
+    {
+        $check = Company::whereHas('users', function ($q) use ($user, $company) {
+            $q
+                ->where('user_id', $user->id)
+                ->where('company_id', $company->id);
+        })->get();
+        if (!count($check)) {
+            return abort('404');
+        }
+        return view('company.user.show', compact('user'));
     }
 }

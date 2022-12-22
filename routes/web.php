@@ -30,11 +30,18 @@ Route::middleware('auth')->group(function () {
         Route::delete('/', 'destroy')->name('profile.destroy');
     });
 
-    Route::prefix('company')->controller(CompanyController::class)->group(function () {
+    Route::prefix('company')->middleware('role:ADMIN')->controller(CompanyController::class)->group(function () {
         Route::get('/', 'index')->name('company');
         Route::get('/create', 'create')->name('company.create');
+        Route::post('/create', 'store')->name('company.store');
         Route::get('/{company}', 'show')->name('company.show');
-        Route::post('/', 'store')->name('company.store');
+        Route::put('/{company}', 'update')->name('company.update');
+
+        Route::prefix('/{company}/user')->group(function () {
+            Route::get('/register', 'userRegister')->name('company.user.register');
+            Route::get('/{user}', 'userShow')->name('company.user.show');
+            Route::post('/register', 'userStore')->name('company.user.store');
+        });
     });
 });
 
