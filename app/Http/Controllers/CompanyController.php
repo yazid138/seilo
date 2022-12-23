@@ -11,7 +11,9 @@ use App\Models\Company;
 use App\Models\Media;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Yajra\DataTables\Facades\DataTables;
 
 class CompanyController extends Controller
 {
@@ -177,5 +179,28 @@ class CompanyController extends Controller
             return abort('404');
         }
         return view('company.user.show', compact('user'));
+    }
+
+    public function getAllCompanies()
+    {
+        $company = DB::table('companies')
+            ->select(
+                'id as id',
+                'name as name',
+                'email as email',
+                'phone as phone',
+
+            )
+            ->get();
+
+        return Datatables::of($company)
+            ->addColumn('action', function ($company) {
+                $html = '
+            <a href ="' . url('company.show') . "/" . $company->id . '">
+            <i class="fa fa-edit"></i>
+            </a>';
+                return $html;
+            })
+            ->make(true);
     }
 }

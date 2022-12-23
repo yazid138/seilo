@@ -1,17 +1,54 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Company') }}
+            {{ __('List Company') }}
         </h2>
     </x-slot>
+
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <x-link href="{{ route('company.create') }}">Tambah Company</x-link>
-                    <h1>List Company</h1>
-                    <table class="min-w-full">
+
+@push('scripts')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#datatable').DataTable({
+                ajax: '{{ route('getAllCompanies') }}',
+                serverSide: false,
+                processing: true,
+                deferRender: true,
+                type: 'GET',
+                destroy: true,
+                columns: [
+                    { data: 'name', name: 'name' },
+                    { data: 'email', name: 'email' },
+                    { data: 'phone', name: 'phone' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false },
+                ]
+            });
+        });
+    </script>
+@endpush
+
+@section('content')
+    <table class="table table-striped table-hover" id="datatable">
+        <thead>
+            <tr>
+                {{-- @php($counter = 1)
+                <th>{{ $counter++ }}</th> --}}
+                <th>Nama Perusahaan</th>
+                <th>Email</th>
+                <th>No Telepon</th>
+                <th>Opsi</th>
+            </tr>
+        </thead>
+    </table>
+@endsection
+
+                    {{-- <table class="min-w-full">
                         <thead class="border-b"">
                             <tr>
                                 <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">No</th>
@@ -47,7 +84,7 @@
                                 </tr>
                             @endforelse
                         </tbody>
-                    </table>
+                    </table> --}}
                 </div>
             </div>
         </div>

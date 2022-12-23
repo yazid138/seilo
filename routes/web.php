@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('company')->middleware('role:ADMIN')->controller(CompanyController::class)->group(function () {
         Route::get('/', 'index')->name('company');
+        Route::get('/getAllCompanies', 'getAllCompanies')->name('getAllCompanies');
         Route::get('/create', 'create')->name('company.create');
         Route::post('/create', 'store')->name('company.store');
         Route::get('/{company}', 'show')->name('company.show');
