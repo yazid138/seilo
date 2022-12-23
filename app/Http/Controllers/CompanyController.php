@@ -70,7 +70,7 @@ class CompanyController extends Controller
             'url' => $request->companyWeb,
         ]);
 
-        return redirect()->back();
+        return to_route('company');
     }
 
     /**
@@ -108,13 +108,18 @@ class CompanyController extends Controller
      */
     public function update(CompanyUpdateRequest $request, Company $company)
     {
-        Address::find($company->address()->id)->update([
+        Address::find($company->with('address')->first()->id)->update([
             'description' => $request->address,
             'province' => $request->province,
             'city' => $request->city,
             'postal_code' => $request->postal_code,
         ]);
-        $media;
+        $data = [
+            'name' => $request->companyName,
+            'email' => $request->companyEmail,
+            'phone' => $request->companyPhone,
+            'url' => $request->companyWeb,
+        ];
         if ($request->hasFile('companyLogo')) {
             $image = $request->file('companyLogo');
             $name = time() . '-' . uniqid() . '.' . $image->extension();
@@ -125,16 +130,10 @@ class CompanyController extends Controller
                 'type' => $image->getMimeType(),
                 'size' => $image->getSize(),
             ]);
+            $data['foto_id'] = $media->id;
         }
-        $company->update([
-            'foto_id' => $media->id,
-            'name' => $request->companyName,
-            'email' => $request->companyEmail,
-            'phone' => $request->companyPhone,
-            'url' => $request->companyWeb,
-        ]);
-
-        return redirect()->back();
+        $company->update($data);
+        return to_route('company');
     }
 
     /**
