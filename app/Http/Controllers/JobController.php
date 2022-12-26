@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\JobCreateRequest;
 use App\Models\Job;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class JobController extends Controller
 {
@@ -14,7 +17,8 @@ class JobController extends Controller
      */
     public function index()
     {
-        //
+        $jobs = Auth::user()->company[0]->jobs;
+        return view('company.job.index', compact('jobs'));
     }
 
     /**
@@ -24,7 +28,7 @@ class JobController extends Controller
      */
     public function create()
     {
-        //
+        return view('company.job.create');
     }
 
     /**
@@ -33,9 +37,13 @@ class JobController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(JobCreateRequest $request)
     {
-        //
+        $company = Auth::user()->company[0];
+        $data = $request->toArray();
+        $data['company_id'] = $company->id;
+        Job::create($data);
+        return to_route('company.job');
     }
 
     /**
@@ -46,7 +54,7 @@ class JobController extends Controller
      */
     public function show(Job $job)
     {
-        //
+        return view('company.job.show', compact('job'));
     }
 
     /**
@@ -67,9 +75,10 @@ class JobController extends Controller
      * @param  \App\Models\Job  $job
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Job $job)
+    public function update(JobCreateRequest $request, Job $job)
     {
-        //
+        $job->update($request->toArray());
+        return to_route('company.job');
     }
 
     /**

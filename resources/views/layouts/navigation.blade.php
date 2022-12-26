@@ -26,14 +26,23 @@
                             <x-nav-link :href="route('company')" :active="request()->routeIs('company')">
                                 {{ __('Company') }}
                             </x-nav-link>
-                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            <x-nav-link :href="route('company.job')" :active="request()->routeIs('company.job')">
                                 {{ __('Job') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                {{ __('Hire') }}
                             </x-nav-link>
                         @break
 
                         @default
                             <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                {{ __('Profile') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                                 {{ __('List Job') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                {{ __('Status') }}
                             </x-nav-link>
                     @endswitch
                 </div>

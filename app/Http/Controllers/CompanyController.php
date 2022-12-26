@@ -92,20 +92,14 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        $users = User::where('role', 'COMPANY')->whereHas('company', function ($q) use ($company) {
-            $q->where('company_id', $company->id);
-        })->get();
-
+        $users = $company->users;
         return view('admin.company.show', compact('company', 'users'));
     }
 
     public function show2()
     {
         $company = Auth::user()->company[0];
-        $users = User::where('role', 'COMPANY')->whereHas('company', function ($q) use ($company) {
-            $q->where('company_id', $company->id);
-        })->get();
-
+        $users = $users = $company->users;
         return view('company.company.show', compact('company', 'users'));
     }
 
@@ -244,12 +238,7 @@ class CompanyController extends Controller
 
     public function userShow(Request $request, Company $company, User $user)
     {
-        $check = Company::whereHas('users', function ($q) use ($user, $company) {
-            $q
-                ->where('user_id', $user->id)
-                ->where('company_id', $company->id);
-        })->get();
-        if (!count($check)) {
+        if ($user->company->id !== $company->id) {
             return abort('404');
         }
         return view('admin.company.user.show', compact('user'));
@@ -257,13 +246,7 @@ class CompanyController extends Controller
 
     public function userShow2(Request $request, User $user)
     {
-        $company = Auth::user()->company[0];
-        $check = Company::whereHas('users', function ($q) use ($user, $company) {
-            $q
-                ->where('user_id', $user->id)
-                ->where('company_id', $company->id);
-        })->get();
-        if (!count($check)) {
+        if ($user->company->id !== $company->id) {
             return abort('404');
         }
         return view('company.company.user.show', compact('user'));

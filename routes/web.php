@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\JobController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -62,6 +63,15 @@ Route::middleware('auth')->group(function () {
 
         });
 
+        Route::prefix('job')->controller(JobController::class)->group(function () {
+            Route::get('/', 'index')->name('company.job');
+            Route::get('/create', 'create')->name('company.job.create');
+            Route::get('/{job}', 'show')->name('company.job.show');
+            Route::post('/', 'store')->name('company.job.store');
+            Route::get('/{job}/update', 'edit')->name('company.job.edit');
+            Route::put('/{job}', 'update')->name('company.job.update');
+            Route::delete('/{job}', 'destroy')->name('company.job.destroy');
+        });
     });
 
     Route::middleware('role:USER')->group(function () {
