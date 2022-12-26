@@ -13,6 +13,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Yajra\DataTables\Facades\DataTables;
 
 class CompanyController extends Controller
 {
@@ -140,7 +141,6 @@ class CompanyController extends Controller
             'phone' => $request->companyPhone,
             'url' => $request->companyWeb,
         ];
-        $media;
         if ($request->hasFile('companyLogo')) {
             $image = $request->file('companyLogo');
             $name = time() . '-' . uniqid() . '.' . $image->extension();
@@ -151,6 +151,7 @@ class CompanyController extends Controller
                 'type' => $image->getMimeType(),
                 'size' => $image->getSize(),
             ]);
+            $data['foto_id'] = $media->id;
             $data['foto_id'] = $media->id;
         }
         $company->update($data);
@@ -266,5 +267,28 @@ class CompanyController extends Controller
             return abort('404');
         }
         return view('company.company.user.show', compact('user'));
+    }
+
+    public function getAllCompanies()
+    {
+        $company = DB::table('companies')
+            ->select(
+                'id as id',
+                'name as name',
+                'email as email',
+                'phone as phone',
+
+            )
+            ->get();
+
+        return Datatables::of($company)
+            ->addColumn('action', function ($company) {
+                $html = '
+            <a href ="' . url('company.show') . "/" . $company->id . '">
+            <i class="fa fa-edit"></i>
+            </a>';
+                return $html;
+            })
+            ->make(true);
     }
 }

@@ -26,7 +26,7 @@ class CompanyCreateRequest extends FormRequest
         return [
             'companyName' => 'required|string',
             'companyWeb' => 'required|url',
-            'companyEmail' => 'required|email:dns|unique:companies,email',
+            'companyEmail' => 'required|email:dns',
             'companyPhone' => 'required|numeric',
             'address' => 'required|string',
             'province' => 'required|string',
