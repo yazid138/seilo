@@ -168,7 +168,6 @@ class CompanyController extends Controller
             'phone' => $request->companyPhone,
             'url' => $request->companyWeb,
         ];
-        $media;
         if ($request->hasFile('companyLogo')) {
             $image = $request->file('companyLogo');
             $name = time() . '-' . uniqid() . '.' . $image->extension();

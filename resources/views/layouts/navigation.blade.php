@@ -26,7 +26,7 @@
                             <x-nav-link :href="route('company')" :active="request()->routeIs('company')">
                                 {{ __('Company') }}
                             </x-nav-link>
-                            <x-nav-link :href="route('company.job')" :active="request()->routeIs('company.job')">
+                            <x-nav-link :href="route('job')" :active="request()->routeIs('job')">
                                 {{ __('Job') }}
                             </x-nav-link>
                             <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
@@ -38,7 +38,7 @@
                             <x-nav-link :href="route('profile.detail')" :active="request()->routeIs('profile.detail')">
                                 {{ __('Profile') }}
                             </x-nav-link>
-                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            <x-nav-link :href="route('job')" :active="request()->routeIs('job')">
                                 {{ __('List Job') }}
                             </x-nav-link>
                             <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">

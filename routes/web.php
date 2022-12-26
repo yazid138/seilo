@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\JobController;
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\JobController;
+use App\Http\Controllers\HireController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,17 +63,28 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('job')->controller(JobController::class)->group(function () {
+        Route::get('/', 'index')->name('job');
+        Route::get('/{job}', 'show')->name('company.job.show');
+
         Route::middleware('role:COMPANY')->group(function () {
-            Route::get('/', 'index')->name('company.job');
             Route::get('/create', 'create')->name('company.job.create');
-            Route::get('/{job}', 'show')->name('company.job.show');
             Route::post('/', 'store')->name('company.job.store');
             Route::get('/{job}/update', 'edit')->name('company.job.edit');
             Route::put('/{job}', 'update')->name('company.job.update');
             Route::delete('/{job}', 'destroy')->name('company.job.destroy');
-
         });
-        Route::middleware(['role:USER', 'existsProfile'])->group(function () {});
+    });
+
+    Route::prefix('lamar')->controller(HireController::class)->group(function () {
+        Route::middleware('role:COMPANY')->group(function () {
+            Route::get('/{job}/edit', 'edit')->name('company.hire.edit');
+            Route::put('/{job}', 'update')->name('company.hire.update');
+        });
+
+        Route::middleware(['role:USER', 'existsProfile'])->group(function () {
+            Route::get('/{job}/add', 'create')->name('user.hire.create');
+            Route::post('/{job}', 'store')->name('user.hire.store');
+        });
     });
 });
 

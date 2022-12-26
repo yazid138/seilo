@@ -17,8 +17,16 @@ class JobController extends Controller
      */
     public function index()
     {
-        $jobs = Auth::user()->company[0]->jobs;
-        return view('company.job.index', compact('jobs'));
+        switch (Auth::user()->role) {
+            case 'COMPANY':
+                $jobs = Auth::user()->company[0]->jobs;
+                return view('company.job.index', compact('jobs'));
+
+            default:
+                $jobs = Job::all();
+                return view('job', compact('jobs'));
+        }
+
     }
 
     /**
@@ -54,7 +62,22 @@ class JobController extends Controller
      */
     public function show(Job $job)
     {
-        return view('company.job.show', compact('job'));
+        switch (Auth::user()->role) {
+            case 'COMPANY':
+                return view('company.job.show', compact('job'));
+
+            default:
+                $pernahLamar = false;
+                foreach (Auth::user()->hires as $hire) {
+                    if ($hire->job->id === $job->id) {
+                        $pernahLamar = true;
+                        break;
+                    }
+                }
+
+                return view('jobShow', compact('job', 'pernahLamar'));
+        }
+
     }
 
     /**
