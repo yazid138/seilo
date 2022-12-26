@@ -26,7 +26,7 @@
                     </div>
 
                     <div class="flex items-center justify-end mt-4">
-                        <x-link href="{{ route('company.show', request()->company) }}">Kembali</x-link>
+                        <x-link href="{{ route('company') }}">Kembali</x-link>
                     </div>
                 </div>
             </div>

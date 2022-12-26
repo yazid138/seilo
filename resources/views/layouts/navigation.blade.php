@@ -23,6 +23,9 @@
                         @break
 
                         @case('COMPANY')
+                            <x-nav-link :href="route('company')" :active="request()->routeIs('company')">
+                                {{ __('Company') }}
+                            </x-nav-link>
                             <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                                 {{ __('Job') }}
                             </x-nav-link>
@@ -43,9 +46,18 @@
                         <button
                             class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                             <div>
-                                @if (Auth::user()->role === 'ADMIN')
-                                    Admin -
-                                @endif {{ Auth::user()->name }}
+                                @switch(Auth::user()->role)
+                                    @case('ADMIN')
+                                        Admin -
+                                    @break
+
+                                    @case('COMPANY')
+                                        {{ Auth::user()->company[0]->name }} -
+                                    @break
+
+                                    @default
+                                @endswitch
+                                {{ Auth::user()->name }}
                             </div>
 
                             <div class="ml-1">
@@ -106,9 +118,18 @@
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">
-                    @if (Auth::user()->role === 'ADMIN')
-                        Admin -
-                    @endif {{ Auth::user()->name }}
+                    @switch(Auth::user()->role)
+                        @case('ADMIN')
+                            Admin -
+                        @break
+
+                        @case('COMPANY')
+                            {{ Auth::user()->company[0]->name }} -
+                        @break
+
+                        @default
+                    @endswitch
+                    {{ Auth::user()->name }}
                 </div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
             </div>

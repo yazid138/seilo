@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <h2>Informasi Perusahaan</h2>
-                    <form method="POST" action="{{ route('company.update', $company) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('company.company.update') }}" enctype="multipart/form-data">
                         @csrf
                         @method('put')
 
@@ -87,7 +87,7 @@
                     </form>
 
                     <h2>Staff Perusahaan</h2>
-                    <x-link href="{{ route('company.user.register', $company) }}">Tambah Staff</x-link>
+                    <x-link href="{{ route('company.company.user.register') }}">Tambah Staff</x-link>
                     <table class="min-w-full">
                         <thead class="border-b">
                             <tr>
@@ -105,7 +105,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         {{ $user->name }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        <x-link href="{{ route('company.user.show', [$company, $user]) }}">Detail
+                                        <x-link href="{{ route('company.company.user.show', $user) }}">Detail
                                         </x-link>
                                     </td>
                                 </tr>

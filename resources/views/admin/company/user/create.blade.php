@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form method="POST" action="{{ route('company.user.store', request()->company) }}">
+                    <form method="POST" action="{{ route('admin.company.user.store', request()->company) }}">
                         @csrf
 
                         <h2>Tambah Staff</h2>
@@ -31,7 +31,7 @@
                         </div>
 
                         <div class="flex items-center justify-end mt-4">
-                            <x-link href="{{ route('company.show', request()->company) }}">Kembali</x-link>
+                            <x-link href="{{ route('admin.company.show', request()->company) }}">Kembali</x-link>
                             <x-primary-button class="ml-4">
                                 {{ __('Simpan') }}
                             </x-primary-button>

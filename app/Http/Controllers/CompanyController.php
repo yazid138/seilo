@@ -11,6 +11,7 @@ use App\Models\Company;
 use App\Models\Media;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class CompanyController extends Controller
@@ -22,8 +23,17 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::all();
-        return view('company.index', compact('companies'));
+        switch (Auth::user()->role) {
+            case 'ADMIN':
+                $companies = Company::all();
+                return view('admin.company.index', compact('companies'));
+                break;
+            case 'COMPANY':
+                $company = Auth::user()->company[0];
+                $users = $company->users;
+                return view('company.company.show', compact('company', 'users'));
+                break;
+        }
     }
 
     /**
@@ -33,7 +43,7 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        return view('company.create');
+        return view('admin.company.create');
     }
 
     /**
@@ -70,7 +80,7 @@ class CompanyController extends Controller
             'url' => $request->companyWeb,
         ]);
 
-        return redirect()->back();
+        return to_route('company');
     }
 
     /**
@@ -85,7 +95,17 @@ class CompanyController extends Controller
             $q->where('company_id', $company->id);
         })->get();
 
-        return view('company.show', compact('company', 'users'));
+        return view('admin.company.show', compact('company', 'users'));
+    }
+
+    public function show2()
+    {
+        $company = Auth::user()->company[0];
+        $users = User::where('role', 'COMPANY')->whereHas('company', function ($q) use ($company) {
+            $q->where('company_id', $company->id);
+        })->get();
+
+        return view('company.company.show', compact('company', 'users'));
     }
 
     /**
@@ -108,12 +128,18 @@ class CompanyController extends Controller
      */
     public function update(CompanyUpdateRequest $request, Company $company)
     {
-        Address::find($company->address()->id)->update([
+        Address::find($company->address->id)->update([
             'description' => $request->address,
             'province' => $request->province,
             'city' => $request->city,
             'postal_code' => $request->postal_code,
         ]);
+        $data = [
+            'name' => $request->companyName,
+            'email' => $request->companyEmail,
+            'phone' => $request->companyPhone,
+            'url' => $request->companyWeb,
+        ];
         $media;
         if ($request->hasFile('companyLogo')) {
             $image = $request->file('companyLogo');
@@ -125,14 +151,42 @@ class CompanyController extends Controller
                 'type' => $image->getMimeType(),
                 'size' => $image->getSize(),
             ]);
+            $data['foto_id'] = $media->id;
         }
-        $company->update([
-            'foto_id' => $media->id,
+        $company->update($data);
+
+        return to_route('admin.company.show', $company);
+    }
+
+    public function update2(CompanyUpdateRequest $request)
+    {
+        $company = Auth::user()->company[0];
+        Address::find($company->address->id)->update([
+            'description' => $request->address,
+            'province' => $request->province,
+            'city' => $request->city,
+            'postal_code' => $request->postal_code,
+        ]);
+        $data = [
             'name' => $request->companyName,
             'email' => $request->companyEmail,
             'phone' => $request->companyPhone,
             'url' => $request->companyWeb,
-        ]);
+        ];
+        $media;
+        if ($request->hasFile('companyLogo')) {
+            $image = $request->file('companyLogo');
+            $name = time() . '-' . uniqid() . '.' . $image->extension();
+            $image->storeAs('images', $name, 'public');
+            $media = Media::create([
+                'name' => $image->getClientOriginalName(),
+                'url' => asset('storage/images/' . $name),
+                'type' => $image->getMimeType(),
+                'size' => $image->getSize(),
+            ]);
+            $data['foto_id'] = $media->id;
+        }
+        $company->update($data);
 
         return redirect()->back();
     }
@@ -150,7 +204,12 @@ class CompanyController extends Controller
 
     public function userRegister(Request $request)
     {
-        return view('company.user.create');
+        return view('admin.company.user.create');
+    }
+
+    public function userRegister2(Request $request)
+    {
+        return view('company.company.user.create');
     }
 
     public function userStore(CompanyCreateUserRequest $request, Company $company)
@@ -164,7 +223,22 @@ class CompanyController extends Controller
 
         $company->users()->attach($user);
 
-        return to_route('company.show', $company);
+        return to_route('admin.company.show', $company);
+    }
+
+    public function userStore2(CompanyCreateUserRequest $request)
+    {
+        $company = Auth::user()->company[0];
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make('123'),
+            'role' => 'COMPANY',
+        ]);
+
+        $company->users()->attach($user);
+
+        return to_route('company', $company);
     }
 
     public function userShow(Request $request, Company $company, User $user)
@@ -177,6 +251,20 @@ class CompanyController extends Controller
         if (!count($check)) {
             return abort('404');
         }
-        return view('company.user.show', compact('user'));
+        return view('admin.company.user.show', compact('user'));
+    }
+
+    public function userShow2(Request $request, User $user)
+    {
+        $company = Auth::user()->company[0];
+        $check = Company::whereHas('users', function ($q) use ($user, $company) {
+            $q
+                ->where('user_id', $user->id)
+                ->where('company_id', $company->id);
+        })->get();
+        if (!count($check)) {
+            return abort('404');
+        }
+        return view('company.company.user.show', compact('user'));
     }
 }

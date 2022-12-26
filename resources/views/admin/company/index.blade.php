@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <x-link href="{{ route('company.create') }}">Tambah Company</x-link>
+                    <x-link href="{{ route('admin.company.create') }}">Tambah Company</x-link>
                     <h1>List Company</h1>
                     <table class="min-w-full">
                         <thead class="border-b"">
@@ -38,7 +38,7 @@
                                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                         {{ $company->email }}<br>{{ $company->phone }}</td>
                                     <td>
-                                        <x-link href="{{ route('company.show', $company) }}">Detail</x-link>
+                                        <x-link href="{{ route('admin.company.show', $company) }}">Detail</x-link>
                                     </td>
                                 </tr>
                             @empty

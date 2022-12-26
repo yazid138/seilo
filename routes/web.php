@@ -30,18 +30,41 @@ Route::middleware('auth')->group(function () {
         Route::delete('/', 'destroy')->name('profile.destroy');
     });
 
-    Route::prefix('company')->middleware('role:ADMIN')->controller(CompanyController::class)->group(function () {
-        Route::get('/', 'index')->name('company');
-        Route::get('/create', 'create')->name('company.create');
-        Route::post('/create', 'store')->name('company.store');
-        Route::get('/{company}', 'show')->name('company.show');
-        Route::put('/{company}', 'update')->name('company.update');
+    Route::middleware('role:ADMIN,COMPANY')->group(function () {
+        Route::get('/company', [CompanyController::class, 'index'])->name('company');
+    });
 
-        Route::prefix('/{company}/user')->group(function () {
-            Route::get('/register', 'userRegister')->name('company.user.register');
-            Route::get('/{user}', 'userShow')->name('company.user.show');
-            Route::post('/register', 'userStore')->name('company.user.store');
+    Route::middleware('role:ADMIN')->group(function () {
+        Route::prefix('company')->controller(CompanyController::class)->group(function () {
+            Route::get('/create', 'create')->name('admin.company.create');
+            Route::post('/create', 'store')->name('admin.company.store');
+            Route::get('/{company}', 'show')->name('admin.company.show');
+            Route::put('/{company}', 'update')->name('admin.company.update');
+
+            Route::prefix('/{company}/user')->group(function () {
+                Route::get('/register', 'userRegister')->name('admin.company.user.register');
+                Route::get('/{user}', 'userShow')->name('admin.company.user.show');
+                Route::post('/register', 'userStore')->name('admin.company.user.store');
+            });
+
         });
+    });
+
+    Route::middleware('role:COMPANY')->group(function () {
+        Route::prefix('company')->controller(CompanyController::class)->group(function () {
+            Route::put('/', 'update2')->name('company.company.update');
+
+            Route::prefix('/user')->group(function () {
+                Route::get('/register', 'userRegister2')->name('company.company.user.register');
+                Route::get('/{user}', 'userShow2')->name('company.company.user.show');
+                Route::post('/register', 'userStore2')->name('company.company.user.store');
+            });
+
+        });
+
+    });
+
+    Route::middleware('role:USER')->group(function () {
     });
 });
 
