@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreignIdFor(Address::class)->constrained();
             $table->foreignIdFor(Media::class, 'foto_id')->constrained('media', 'id');
             $table->foreignIdFor(Education::class)->constrained();
-            $table->foreignIdFor(SocialMedia::class)->constrained();
+            $table->foreignIdFor(SocialMedia::class)->nullable()->constrained();
             $table->string('phone', 15);
             $table->date('birth_date');
             $table->enum('gender', ['L', 'P']);

@@ -19,7 +19,7 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Address::class)->constrained();
-            $table->foreignIdFor(SocialMedia::class)->constrained()->nullable();
+            $table->foreignIdFor(SocialMedia::class)->nullable()->constrained();
             $table->foreignIdFor(Media::class, 'foto_id')->constrained('media', 'id');
             $table->string('name');
             $table->string('phone', 15);

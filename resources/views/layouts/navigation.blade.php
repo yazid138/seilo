@@ -35,7 +35,7 @@
                         @break
 
                         @default
-                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            <x-nav-link :href="route('profile.detail')" :active="request()->routeIs('profile.detail')">
                                 {{ __('Profile') }}
                             </x-nav-link>
                             <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">

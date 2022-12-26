@@ -26,6 +26,8 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     Route::prefix('profile')->controller(ProfileController::class)->group(function () {
+        Route::get('/detail', 'detail')->name('profile.detail');
+        Route::post('/', 'store')->name('profile.store');
         Route::get('/', 'edit')->name('profile.edit');
         Route::patch('/', 'update')->name('profile.update');
         Route::delete('/', 'destroy')->name('profile.destroy');
@@ -74,7 +76,10 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    Route::middleware('role:USER')->group(function () {
+    Route::middleware(['role:USER', 'existsProfile'])->group(function () {
+        Route::get('/tes', function () {
+            return 'tes';
+        });
     });
 });
 
