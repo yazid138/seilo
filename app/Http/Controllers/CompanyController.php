@@ -238,7 +238,7 @@ class CompanyController extends Controller
 
     public function userShow(Request $request, Company $company, User $user)
     {
-        if ($user->company->id !== $company->id) {
+        if ($user->company[0]->id !== $company->id) {
             return abort('404');
         }
         return view('admin.company.user.show', compact('user'));
@@ -246,7 +246,7 @@ class CompanyController extends Controller
 
     public function userShow2(Request $request, User $user)
     {
-        if ($user->company->id !== $company->id) {
+        if ($user->company[0]->id !== Auth::user()->company[0]->id) {
             return abort('404');
         }
         return view('company.company.user.show', compact('user'));

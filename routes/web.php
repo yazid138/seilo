@@ -33,12 +33,10 @@ Route::middleware('auth')->group(function () {
         Route::delete('/', 'destroy')->name('profile.destroy');
     });
 
-    Route::middleware('role:ADMIN,COMPANY')->group(function () {
-        Route::get('/company', [CompanyController::class, 'index'])->name('company');
-    });
+    Route::prefix('company')->controller(CompanyController::class)->group(function () {
+        Route::get('/', 'index')->middleware('role:ADMIN,COMPANY')->name('company');
 
-    Route::middleware('role:ADMIN')->group(function () {
-        Route::prefix('company')->controller(CompanyController::class)->group(function () {
+        Route::middleware('role:ADMIN')->group(function () {
             Route::get('/create', 'create')->name('admin.company.create');
             Route::post('/create', 'store')->name('admin.company.store');
             Route::get('/{company}', 'show')->name('admin.company.show');
@@ -49,12 +47,9 @@ Route::middleware('auth')->group(function () {
                 Route::get('/{user}', 'userShow')->name('admin.company.user.show');
                 Route::post('/register', 'userStore')->name('admin.company.user.store');
             });
-
         });
-    });
 
-    Route::middleware('role:COMPANY')->group(function () {
-        Route::prefix('company')->controller(CompanyController::class)->group(function () {
+        Route::middleware('role:COMPANY')->group(function () {
             Route::put('/', 'update2')->name('company.company.update');
 
             Route::prefix('/user')->group(function () {
@@ -64,8 +59,10 @@ Route::middleware('auth')->group(function () {
             });
 
         });
+    });
 
-        Route::prefix('job')->controller(JobController::class)->group(function () {
+    Route::prefix('job')->controller(JobController::class)->group(function () {
+        Route::middleware('role:COMPANY')->group(function () {
             Route::get('/', 'index')->name('company.job');
             Route::get('/create', 'create')->name('company.job.create');
             Route::get('/{job}', 'show')->name('company.job.show');
@@ -73,13 +70,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/{job}/update', 'edit')->name('company.job.edit');
             Route::put('/{job}', 'update')->name('company.job.update');
             Route::delete('/{job}', 'destroy')->name('company.job.destroy');
-        });
-    });
 
-    Route::middleware(['role:USER', 'existsProfile'])->group(function () {
-        Route::get('/tes', function () {
-            return 'tes';
         });
+        Route::middleware(['role:USER', 'existsProfile'])->group(function () {});
     });
 });
 
