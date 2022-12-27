@@ -80,7 +80,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/{hire}', 'show')->name('hire.detail');
 
         Route::middleware('role:COMPANY')->group(function () {
-            Route::put('/{job}', 'update')->name('company.hire.update');
+            Route::put('/{hire}', 'update')->name('company.hire.update');
         });
 
         Route::middleware(['role:USER', 'existsProfile'])->group(function () {

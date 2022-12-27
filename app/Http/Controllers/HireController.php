@@ -86,8 +86,15 @@ class HireController extends Controller
      */
     public function show(Request $request, Hire $hire)
     {
-        $user = Auth::user();
-        return view('hireShow', compact('user', 'hire'));
+        switch (Auth::user()->role) {
+            case 'COMPANY':
+                $user = $hire->user;
+                return view('hireShow', compact('user', 'hire'));
+
+            default:
+                $user = Auth::user();
+                return view('hireShowUser', compact('user', 'hire'));
+        }
     }
 
     /**
@@ -110,7 +117,11 @@ class HireController extends Controller
      */
     public function update(Request $request, Hire $hire)
     {
-        //
+        $hire->update([
+            'isApprove' => $request->isApprove,
+        ]);
+
+        return to_route('hire');
     }
 
     /**
