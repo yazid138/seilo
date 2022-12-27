@@ -28,4 +28,9 @@ class Hire extends Model
     {
         return $this->belongsTo(Media::class, 'cv_id');
     }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 }

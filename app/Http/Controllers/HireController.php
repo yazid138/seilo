@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Job;
+use App\Http\Controllers\Controller;
 use App\Models\Hire;
+use App\Models\Job;
 use App\Models\Media;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class HireController extends Controller
@@ -18,7 +18,22 @@ class HireController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $hires;
+        switch ($user->role) {
+            case 'COMPANY':
+                $job = Job::where('company_id', $user->company[0]->id)->get();
+                $jobId = array_map(function ($v) {
+                    return $v['id'];
+                }, $job->toArray());
+                $hires = Hire::whereIn('job_id', $jobId)->get();
+                break;
+            case 'USER':
+                $hires = Hire::where('user_id', $user->id)->get();
+                break;
+        }
+        return view('jobStatus', compact('hires'));
+
     }
 
     /**
@@ -54,6 +69,7 @@ class HireController extends Controller
         ]);
 
         Hire::create([
+            'company_id' => $job->company->id,
             'cv_id' => $media->id,
             'user_id' => Auth::user()->id,
             'job_id' => $job->id,
@@ -68,9 +84,10 @@ class HireController extends Controller
      * @param  \App\Models\Hire  $hire
      * @return \Illuminate\Http\Response
      */
-    public function show(Hire $hire)
+    public function show(Request $request, Hire $hire)
     {
-        //
+        $user = Auth::user();
+        return view('hireShow', compact('user', 'hire'));
     }
 
     /**

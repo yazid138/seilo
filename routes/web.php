@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\JobController;
-use App\Http\Controllers\HireController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\HireController;
+use App\Http\Controllers\JobController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('profile')->controller(ProfileController::class)->group(function () {
         Route::get('/detail', 'detail')->name('profile.detail');
         Route::post('/', 'store')->name('profile.store');
-        Route::get('/', 'edit')->name('profile.edit');
+        Route::get('/edit', 'edit')->name('profile.edit');
         Route::patch('/', 'update')->name('profile.update');
         Route::delete('/', 'destroy')->name('profile.destroy');
     });
@@ -63,9 +63,6 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('job')->controller(JobController::class)->group(function () {
-        Route::get('/', 'index')->name('job');
-        Route::get('/{job}', 'show')->name('company.job.show');
-
         Route::middleware('role:COMPANY')->group(function () {
             Route::get('/create', 'create')->name('company.job.create');
             Route::post('/', 'store')->name('company.job.store');
@@ -73,11 +70,16 @@ Route::middleware('auth')->group(function () {
             Route::put('/{job}', 'update')->name('company.job.update');
             Route::delete('/{job}', 'destroy')->name('company.job.destroy');
         });
+
+        Route::get('/', 'index')->name('job');
+        Route::get('/{job}', 'show')->name('company.job.show');
     });
 
     Route::prefix('lamar')->controller(HireController::class)->group(function () {
+        Route::get('/status', 'index')->name('hire');
+        Route::get('/{hire}', 'show')->name('hire.detail');
+
         Route::middleware('role:COMPANY')->group(function () {
-            Route::get('/{job}/edit', 'edit')->name('company.hire.edit');
             Route::put('/{job}', 'update')->name('company.hire.update');
         });
 

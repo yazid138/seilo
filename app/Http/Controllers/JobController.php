@@ -51,7 +51,7 @@ class JobController extends Controller
         $data = $request->toArray();
         $data['company_id'] = $company->id;
         Job::create($data);
-        return to_route('company.job');
+        return to_route('job');
     }
 
     /**
