@@ -70,9 +70,6 @@ Route::middleware('auth')->group(function () {
             Route::put('/{job}', 'update')->name('company.job.update');
             Route::delete('/{job}', 'destroy')->name('company.job.destroy');
         });
-
-        Route::get('/', 'index')->name('job');
-        Route::get('/{job}', 'show')->name('company.job.show');
     });
 
     Route::prefix('lamar')->controller(HireController::class)->group(function () {
@@ -89,5 +86,8 @@ Route::middleware('auth')->group(function () {
         });
     });
 });
+
+Route::get('/job', [JobController::class, 'index'])->name('job');
+Route::get('/job/{job}', [JobController::class, 'show'])->name('company.job.show');
 
 require __DIR__ . '/auth.php';
