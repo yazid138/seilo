@@ -460,6 +460,12 @@
                         name="close_date" :value="old('close_date', $job->close_date)" disabled />
                 </div>
 
+                <div class="flex items-center justify-end mt-4">
+                    <x-link href="{{ route('user.hire.create', $job) }}" class="ml-4">
+                        {{ __('Lamar') }}
+                    </x-link>
+                </div>
+
             </div>
         </div>
     </div>
