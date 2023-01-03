@@ -17,15 +17,9 @@
                     </x-nav-link>
                     @switch(Auth::user()->role)
                         @case('ADMIN')
-                            <x-nav-link :href="route('company')" :active="request()->routeIs('company')">
-                                {{ __('Company') }}
-                            </x-nav-link>
                         @break
 
                         @case('COMPANY')
-                            <x-nav-link :href="route('company')" :active="request()->routeIs('company')">
-                                {{ __('Company') }}
-                            </x-nav-link>
                             <x-nav-link :href="route('job')" :active="request()->routeIs('job')">
                                 {{ __('Job') }}
                             </x-nav-link>
@@ -35,9 +29,6 @@
                         @break
 
                         @default
-                            <x-nav-link :href="route('profile.detail')" :active="request()->routeIs('profile.detail')">
-                                {{ __('Profile') }}
-                            </x-nav-link>
                             <x-nav-link :href="route('job')" :active="request()->routeIs('job')">
                                 {{ __('List Job') }}
                             </x-nav-link>
@@ -81,8 +72,27 @@
                     </x-slot>
 
                     <x-slot name="content">
+                        @switch(Auth::user()->role)
+                            @case('ADMIN')
+                                <x-dropdown-link :href="route('company')">
+                                    {{ __('Daftar Perusahaan') }}
+                                </x-dropdown-link>
+                            @break
+
+                            @case('COMPANY')
+                                <x-dropdown-link :href="route('company')">
+                                    {{ __('Profile Information') }}
+                                </x-dropdown-link>
+                            @break
+
+                            @default
+                                <x-dropdown-link :href="route('profile.detail')">
+                                    {{ __('Profile') }}
+                                </x-dropdown-link>
+                        @endswitch
+
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
+                            {{ __('Setting Account') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->

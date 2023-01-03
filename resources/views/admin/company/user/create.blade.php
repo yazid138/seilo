@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Tambah Company') }}
+            {{ __('Registrasi Akun Staff') }}
         </h2>
     </x-slot>
 
@@ -12,11 +12,9 @@
                     <form method="POST" action="{{ route('admin.company.user.store', request()->company) }}">
                         @csrf
 
-                        <h2>Tambah Staff</h2>
-
                         <!-- Name -->
-                        <div>
-                            <x-input-label for="name" :value="__('Name')" />
+                        <div class="mt-4">
+                            <x-input-label for="name" :value="__('Nama Lengkap')" />
                             <x-text-input id="name" class="block mt-1 w-full" type="text" name="name"
                                 :value="old('name')" required autofocus />
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
@@ -24,7 +22,7 @@
 
                         <!-- Email Address -->
                         <div class="mt-4">
-                            <x-input-label for="email" :value="__('Email')" />
+                            <x-input-label for="email" :value="__('Alamat Email')" />
                             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
                                 :value="old('email')" required />
                             <x-input-error :messages="$errors->get('email')" class="mt-2" />

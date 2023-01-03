@@ -102,7 +102,7 @@ class JobController extends Controller
     public function update(JobCreateRequest $request, Job $job)
     {
         $job->update($request->toArray());
-        return to_route('company.job');
+        return to_route('job');
     }
 
     /**

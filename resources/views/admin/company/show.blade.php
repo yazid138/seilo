@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Tambah Company') }}
+            {{ __('Detail Perusahaan') }}
         </h2>
     </x-slot>
 
@@ -15,6 +15,16 @@
                         @csrf
                         @method('put')
 
+                        <!-- Photo -->
+                        <div class="mt-4">
+                            <x-input-label for="companyLogo" :value="__('Logo Perusahaan')" />
+                            <img src="{{ $company->photo->url }}" alt="{{ $company->photo->name }}" width="200"
+                                class="mt-4">
+                            <x-text-input id="companyLogo" class="block mt-4 w-full" type="file" name="companyLogo"
+                                :value="old('companyLogo')" />
+                            <x-input-error :messages="$errors->get('companyLogo')" class="mt-2" />
+                        </div>
+
                         <!-- Name -->
                         <div class="mt-4">
                             <x-input-label for="companyName" :value="__('Nama Perusahaan')" />
@@ -23,17 +33,9 @@
                             <x-input-error :messages="$errors->get('companyName')" class="mt-2" />
                         </div>
 
-                        <!-- Web -->
-                        <div class="mt-4">
-                            <x-input-label for="companyWeb" :value="__('Website Perusahaan')" />
-                            <x-text-input id="companyWeb" class="block mt-1 w-full" type="text" name="companyWeb"
-                                :value="old('companyWeb', $company->url)" required />
-                            <x-input-error :messages="$errors->get('companyWeb')" class="mt-2" />
-                        </div>
-
                         <!-- Email -->
                         <div class="mt-4">
-                            <x-input-label for="companyEmail" :value="__('Email Perusahaan')" />
+                            <x-input-label for="companyEmail" :value="__('Alamat Email')" />
                             <x-text-input id="companyEmail" class="block mt-1 w-full" type="email" name="companyEmail"
                                 :value="old('companyEmail', $company->email)" required />
                             <x-input-error :messages="$errors->get('companyEmail')" class="mt-2" />
@@ -41,19 +43,20 @@
 
                         <!-- Phone -->
                         <div class="mt-4">
-                            <x-input-label for="companyPhone" :value="__('Telepon Perusahaan')" />
+                            <x-input-label for="companyPhone" :value="__('Nomor Telepon')" />
                             <x-text-input id="companyPhone" class="block mt-1 w-full" type="text" name="companyPhone"
                                 :value="old('companyPhone', $company->phone)" required />
                             <x-input-error :messages="$errors->get('companyPhone')" class="mt-2" />
                         </div>
 
-                        <!-- Photo -->
+                        <!-- Web -->
                         <div class="mt-4">
-                            <x-input-label for="companyLogo" :value="__('Logo Perusahaan')" />
-                            <x-text-input id="companyLogo" class="block mt-1 w-full" type="file" name="companyLogo"
-                                :value="old('companyLogo')" />
-                            <x-input-error :messages="$errors->get('companyLogo')" class="mt-2" />
+                            <x-input-label for="companyWeb" :value="__('Situs Perusahaan')" />
+                            <x-text-input id="companyWeb" class="block mt-1 w-full" type="text" name="companyWeb"
+                                :value="old('companyWeb', $company->url)" required />
+                            <x-input-error :messages="$errors->get('companyWeb')" class="mt-2" />
                         </div>
+
 
                         <!-- Address -->
                         <div class="mt-4">
@@ -62,18 +65,20 @@
                                 {{ old('address', $company->address->description) }}
                             </x-text-area>
                             <x-input-error :messages="$errors->get('address')" class="mt-2" />
-
-
+                        </div>
+                        <div class="mt-4">
                             <x-input-label for="province" :value="__('Provinsi')" />
                             <x-text-input id="province" class="block mt-1 w-full" type="text" name="province"
                                 :value="old('province', $company->address->province)" required />
                             <x-input-error :messages="$errors->get('province')" class="mt-2" />
-
+                        </div>
+                        <div class="mt-4">
                             <x-input-label for="city" :value="__('Kota')" />
                             <x-text-input id="city" class="block mt-1 w-full" type="text" name="city"
                                 :value="old('city', $company->address->city)" required />
                             <x-input-error :messages="$errors->get('city')" class="mt-2" />
-
+                        </div>
+                        <div class="mt-4">
                             <x-input-label for="postal_code" :value="__('Kode Pos')" />
                             <x-text-input id="postal_code" class="block mt-1 w-full" type="text" name="postal_code"
                                 :value="old('postal_code', $company->address->postal_code)" required />
@@ -88,7 +93,8 @@
                     </form>
 
                     <h2>Staff Perusahaan</h2>
-                    <x-link href="{{ route('admin.company.user.register', $company) }}">Tambah Staff</x-link>
+                    <x-link class="mt-4 mb-4" href="{{ route('admin.company.user.register', $company) }}">Tambah Staff
+                    </x-link>
                     <table class="min-w-full">
                         <thead class="border-b">
                             <tr>

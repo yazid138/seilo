@@ -1,16 +1,55 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('List Job') }}
-        </h2>
-    </x-slot>
 
-    <div class="py-12">
+    <div class="py-11">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <h1>List Job</h1>
-                    <table class="min-w-full">
+            <div class="overflow-hidden shadow-sm sm:rounded-lg ">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 p-10 gap-6">
+
+                    @forelse ($jobs as $job)
+                        <div class="card-body bg-white h-50 w-100 rounded shadow-lg border-r">
+                            <div class="px-6 py-4">
+                                <img class="w-full mt-4" src="{{ $job->company->photo->url }}">
+                                <div class="font-bold text-xl mt-4  mb-2">{{ $job->title }}</>
+                                    <p class="text-bold text-base mb-2">
+                                        {{ $job->company->name }}
+                                    </p>
+                                    <p class="text-gray-700 text-base">
+                                        <i class="fa-solid fa-location-dot"></i> {{ $job->location }}
+                                    </p>
+                                    <p class="text-gray-700 text-base">
+                                        <i class="fa-solid fa-briefcase"></i> {{ $job->position }}
+                                    </p>
+                                    <div class="px-6 pt-4">
+                                        <span
+                                            class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-green-700 mr-2 mb-2">
+                                            <i class="fa-regular fa-clock"></i>
+                                            {{ date('d-m-Y', strtotime($job->open_date)) }}
+                                        </span>
+
+                                        <span
+                                            class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-red-700 mr-2 mb-2">
+                                            <i class="fa-regular fa-clock"></i>
+                                            {{ date('d-m-Y', strtotime($job->close_date)) }}
+                                        </span>
+
+                                    </div>
+                                    <div class="px-6 pt-4 pb-2 text-center">
+                                        <x-link class="mt-auto" href="{{ route('company.job.show', $job) }}">Detail
+                                        </x-link>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <p>Tidak ada lowongan</p>
+                    @endforelse
+
+
+
+                    {{-- <table class="min-w-full">
                         <thead class="border-b"">
                             <tr>
                                 <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">No</th>
@@ -43,7 +82,7 @@
                                 </tr>
                             @endforelse
                         </tbody>
-                    </table>
+                    </table> --}}
                 </div>
             </div>
         </div>
