@@ -13,7 +13,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Yajra\DataTables\Facades\DataTables;
+use Yajra\DataTables\DataTables;
 
 class CompanyController extends Controller
 {
@@ -22,11 +22,17 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, DataTables $dataTables)
     {
         switch (Auth::user()->role) {
             case 'ADMIN':
-                $companies = Company::all();
+                $companies = Company::query();
+                if ($request->ajax()) {
+                    return $dataTables->eloquent($companies)->addColumn('action', function ($companies) {
+                        return '<a href="' . route('admin.company.show', $companies->id) . '">Detail</a>';
+                    })->toJson();
+                }
+                $companies = $companies->get();
                 return view('admin.company.index', compact('companies'));
                 break;
             case 'COMPANY':

@@ -4,13 +4,13 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="p-6 text-gray-900">
-                    <x-link href="{{ route('admin.company.create') }}">Tambah Company</x-link>
+                    <x-link class="mb-10" href="{{ route('admin.company.create') }}">Tambah Company</x-link>
 
-                    <table class="mt-4 min-w-full">
+                    <table class="min-w-full" id="table">
                         <thead class="border-b"">
                             <tr>
-                                <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">No</th>
-                                <th colspan="2" scope="col"
+                                {{-- <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">No</th> --}}
+                                <th colspan="1" scope="col"
                                     class="text-sm font-medium text-gray-900 px-6 py-4 text-left">Nama
                                     Perusahaan</th>
                                 <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">Contact
@@ -20,7 +20,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @php($counter = 1)
+                            {{-- @php($counter = 1)
                             @forelse ($companies as $company)
                                 <tr class="border-b">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
@@ -40,11 +40,38 @@
                                 <tr>
                                     <td colspan="3" class="text-center">Tidak ada data</td>
                                 </tr>
-                            @endforelse
+                            @endforelse --}}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+    @push('scripts')
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $.ajax({
+                    url: "{{ route('company') }}"
+                }).done(function(e) {
+                    console.log(e)
+                })
+
+                $('#table').DataTable({
+                    ajax: '{{ route('company') }}',
+                    columns: [{
+                        data: 'name',
+                    }, {
+                        data: 'email',
+                    }, {
+                        data: 'action',
+                        orderable: false,
+                        searchable: false,
+                    }],
+
+                })
+
+
+            })
+        </script>
+    @endpush
 </x-app-layout>
