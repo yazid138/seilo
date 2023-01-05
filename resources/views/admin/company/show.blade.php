@@ -1,15 +1,10 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Detail Perusahaan') }}
-        </h2>
-    </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="p-6 text-gray-900">
-                    <h2>Informasi Perusahaan</h2>
+                    <h2 class="font-bold text-xl">Informasi Perusahaan</h2>
                     <form method="POST" action="{{ route('admin.company.update', $company) }}"
                         enctype="multipart/form-data">
                         @csrf
@@ -92,7 +87,17 @@
                         </div>
                     </form>
 
-                    <h2>Staff Perusahaan</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="py-1">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 mb-20">
+                <div class="p-6 text-gray-900">
+
+                    <h2 class="font-bold text-xl">Staff Perusahaan</h2>
                     <x-link class="mt-4 mb-4" href="{{ route('admin.company.user.register', $company) }}">Tambah Staff
                     </x-link>
                     <table class="min-w-full">
@@ -127,4 +132,5 @@
             </div>
         </div>
     </div>
+
 </x-app-layout>

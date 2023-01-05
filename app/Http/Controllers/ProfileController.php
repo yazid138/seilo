@@ -27,6 +27,50 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         if ($user->profile) {
+            $data = [
+                'phone' => $request->phone,
+                'gender' => $request->gender,
+                'birth_date' => $request->birth_date,
+                'about_me' => $request->about_me,
+            ];
+
+            $user->profile->address->update([
+                'description' => $request->address,
+                'province' => $request->province,
+                'city' => $request->city,
+                'postal_code' => $request->postal_code,
+            ]);
+
+            $media = null;
+            if ($request->hasFile('foto')) {
+                $image = $request->file('foto');
+                $name = time() . '-' . uniqid() . '.' . $image->extension();
+                $image->storeAs('images', $name, 'public');
+                $media = Media::create([
+                    'name' => $image->getClientOriginalName(),
+                    'url' => asset('storage/images/' . $name),
+                    'type' => $image->getMimeType(),
+                    'size' => $image->getSize(),
+                ]);
+                $data['foto_id'] = $media->id;
+            }
+
+            $education = $user->profile->education->update([
+                'tingkat_pendidikan' => $request->tingkat_pendidikan,
+                'institusi' => $request->institusi,
+                'jurusan' => $request->jurusan,
+                'nilai_akhir' => $request->nilai_akhir,
+                'tanggal_masuk' => $request->tanggal_masuk,
+                'tanggal_lulus' => $request->tanggal_lulus,
+            ]);
+
+            $socialMedia = $user->profile->socialMedia->update([
+                'instagram' => $request->instagram,
+                'facebook' => $request->facebook,
+                'linkedin' => $request->linkedin,
+            ]);
+
+            $user->profile->update($data);
 
         } else {
             $address = Address::create([

@@ -32,7 +32,7 @@
                             @endauth
                         </div>
                     @endif
-{{-- 
+                    {{-- 
 
                     <!-- Settings Dropdown -->
                     <div class="hidden sm:flex sm:items-center sm:ml-6">

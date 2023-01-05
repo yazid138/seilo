@@ -5,21 +5,27 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="/">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
                     @switch(Auth::user()->role)
                         @case('ADMIN')
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                {{ __('Dashboard') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('company')" :active="request()->routeIs('company')">
+                                {{ __('Daftar Perusahaan') }}
+                            </x-nav-link>
                         @break
 
                         @case('COMPANY')
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                {{ __('Dashboard') }}
+                            </x-nav-link>
                             <x-nav-link :href="route('job')" :active="request()->routeIs('job')">
                                 {{ __('Job') }}
                             </x-nav-link>
@@ -29,6 +35,9 @@
                         @break
 
                         @default
+                            <x-nav-link href="/">
+                                {{ __('Home') }}
+                            </x-nav-link>
                             <x-nav-link :href="route('job')" :active="request()->routeIs('job')">
                                 {{ __('List Job') }}
                             </x-nav-link>

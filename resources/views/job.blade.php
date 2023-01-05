@@ -8,7 +8,6 @@
                     @forelse ($jobs as $job)
                         <div class="card-body bg-white h-50 w-100 rounded shadow-lg border-r">
                             <div class="px-6 py-4">
-                                <img class="w-full mt-4" src="{{ $job->company->photo->url }}">
                                 <div class="font-bold text-xl mt-4  mb-2">{{ $job->title }}</>
                                     <p class="text-bold text-base mb-2">
                                         {{ $job->company->name }}

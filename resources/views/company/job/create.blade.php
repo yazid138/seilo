@@ -1,18 +1,13 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Tambah Lowongan') }}
-        </h2>
-    </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-10 mb-20">
                 <div class="p-6 text-gray-900">
                     <form method="POST" action="{{ route('company.job.store') }}">
                         @csrf
 
-                        <h2>Informasi Lamaran Pekerjaan</h2>
+                        <h2 class="font-bold text-xl">Tambah Lowongan Pekerjaan</h2>
 
                         <!-- title -->
                         <div class="mt-4">

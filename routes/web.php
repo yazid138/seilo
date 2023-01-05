@@ -4,6 +4,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\HireController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Job;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,7 +19,8 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/', function () {
-    return view('welcome');
+    $jobs = Job::query()->limit(5)->get();
+    return view('welcome', compact('jobs'));
 });
 
 Route::get('/dashboard', function () {

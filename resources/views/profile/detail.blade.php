@@ -11,10 +11,21 @@
                         <!-- Photo -->
                         <div class="mt-">
                             <x-input-label for="foto" :value="__('Foto Profil')" />
-                            <img src="{{ $user->profile->photo->url }}" alt="{{ $user->profile->photo->name }}"
-                                width="200" class="mt-4 rounded-full">
-                            <x-text-input id="foto" class="block mt-4 ml-5 w-full" type="file" name="foto"
-                                :value="old('foto')" />
+
+                            @if ($user->profile)
+                                <img src="{{ $user->profile->photo->url }}" alt="{{ $user->profile->photo->name }}"
+                                    width="200" class="mt-4 rounded-full">
+                            @endif
+
+                            {{-- <x-text-input id="foto" class="block mt-4 ml-5 w-full" type="file" name="foto"
+                                :value="old('foto')" /> --}}
+                            @if (!$user->profile)
+                                <x-text-input id="foto" class="block mt-4 ml-5 w-full" type="file"
+                                    name="foto" :value="old('foto')" required />
+                            @else
+                                <x-text-input id="foto" class="block mt-4 ml-5 w-full" type="file"
+                                    name="foto" :value="old('foto')" />
+                            @endif
                             <x-input-error :messages="$errors->get('foto')" class="mt-2" />
                         </div>
 
@@ -156,9 +167,9 @@
         </div>
     </div>
 
-    <div class="">
+    <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-10">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-10 mb-20 ">
                 <div class="p-6 text-gray-900">
 
                     <h2 class="font-bold text-xl">Pendidikan</h2>
@@ -235,15 +246,14 @@
                             )" required autofocus />
                         <x-input-error :messages="$errors->get('tanggal_lulus')" class="mt-2" />
                     </div>
+                    <div class="flex items-center justify-end mt-5">
+                        <x-primary-button class="ml-4">
+                            {{ __('Simpan') }}
+                        </x-primary-button>
+                    </div>
+                    </form>
                 </div>
             </div>
-
-            <div class="flex items-center justify-end mt-5 mb-20">
-                <x-primary-button class="ml-4">
-                    {{ __('Simpan') }}
-                </x-primary-button>
-            </div>
-            </form>
         </div>
     </div>
 

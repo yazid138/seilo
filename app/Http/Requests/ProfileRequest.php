@@ -29,7 +29,7 @@ class ProfileRequest extends FormRequest
             'birth_date' => 'required|date',
             'gender' => 'required|string',
             'about_me' => 'required|string',
-            'foto' => 'required|image',
+            'foto' => 'image',
             'address' => 'required|string',
             'province' => 'required|string',
             'city' => 'required|string',

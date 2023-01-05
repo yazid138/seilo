@@ -2,6 +2,7 @@
     <!-- Session Status -->
     <div class="p-5">
         <x-auth-session-status class="mb-4" :status="session('status')" />
+        <h2 class="text-2xl font-bold mb-10 text-[#4D61AD] text-center">LOGIN</h2>
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
@@ -29,8 +30,8 @@
                     {{ __('Dont have an account? Register') }}
                 </a>
             </div>
-            <div class="flex items-center justify-end mt-4">
-                <x-primary-button class="m-auto pl-10 pr-10">
+            <div class="flex items-center justify-end mt-6">
+                <x-primary-button class="bg-[#4D61AD] m-auto pl-10 pr-10">
                     {{ __('Log in') }}
                 </x-primary-button>
             </div>
